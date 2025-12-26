@@ -1,6 +1,7 @@
 package com.diegodelacruz.codesignal.loops;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,12 +21,43 @@ public class StringSearch {
      * number of the source string is less than or equal to the number of the search string.
      * The order in which the strings appear in the result should reflect their original order in the sourceArray.
      * If no matches are found, the function should return an empty array.
+     *
      * @param sourceArray
      * @param searchArray
      * @return
      */
-    public List<String> stringSearch(List<String> sourceArray, List<String> searchArray){
-        return new ArrayList<>();
+    public List<String> stringSearch(List<String> sourceArray, List<String> searchArray) {
+
+        /* First approach - needs work
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < sourceArray.size(); i++) {
+            for (int j = 0; j < searchArray.size(); j++) {
+                String source = sourceArray.get(i).substring(2);
+                String search = searchArray.get(j);
+                char sea = searchArray.get(j).charAt(0);
+                char sou = sourceArray.get(i).charAt(0);
+
+                if (search.contains(source) && sou <= sea) {
+                    result.add(sourceArray.get(i));
+                    break;
+                }
+            }
+        }
+        return result;
+         */
+        return sourceArray.stream()
+                .filter(sourceStr -> {
+                    String[] sourceParts = sourceStr.split(" ", 2);
+                    int sourceNum = Integer.parseInt(sourceParts[0]);
+                    String sourceWord = sourceParts[1];
+
+                    //Checks if any search string satisfies the condition
+                    return searchArray.stream().anyMatch(searchStr -> {
+                        String[] searchParts = searchStr.split(" ", 2);
+                        int searchNum = Integer.parseInt(searchParts[0]);
+                        return sourceNum <= searchNum && searchStr.contains(sourceWord);
+                    });
+                }).toList();
     }
 
     /**
@@ -35,10 +67,15 @@ public class StringSearch {
      * not found in either 'abcdef' or 'uvwxy', so it is not included in the result.
      * This task requires mastery of skills in nested looping and array manipulation, especially in the context
      * of searching for a string within other strings.
+     *
      * @param args
      */
     public static void main(String[] args) {
-
+        StringSearch ss = new StringSearch();
+        List<String> sourceArray = Arrays.asList("1 abc", "2 def", "3 xyz");
+        List<String> searchArray = Arrays.asList("1 abcdef", "5 uvwxy");
+        //should return {"1 abc"}
+        System.out.println(ss.stringSearch(sourceArray, searchArray));
     }
 
 }
