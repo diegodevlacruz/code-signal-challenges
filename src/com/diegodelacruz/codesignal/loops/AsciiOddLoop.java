@@ -18,7 +18,37 @@ public class AsciiOddLoop {
      * @return
      */
     private String evenOddWord(String sentence, char c) {
-        return "";
+        if (sentence == null || sentence.isBlank()) return "";
+        StringBuilder sb = new StringBuilder();
+        String[] words = sentence.split(" ");
+
+        /* First approach
+        for (String word : words) {
+            if (word.length() % 2 == 0) {
+                String halfWord = word.substring(word.length() / 2);
+                for (char ch : halfWord.toCharArray()) {
+                    if (ch < c) {
+                        sb.append(ch);
+                    }
+                }
+            }
+        }*/
+
+        // Second approach Memory efficient and avoids overhead of objects
+        for (String word : words) {
+            int wordLength = word.length();
+            if (wordLength % 2 == 0) {
+
+                for (int i = wordLength / 2; i < wordLength; i++) {
+                    char ch = word.charAt(i);
+                    if (ch < c) {
+                        sb.append(ch);
+                    }
+                }
+            }
+        }
+        return sb.toString();
+
     }
 
     /**
